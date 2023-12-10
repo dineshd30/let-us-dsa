@@ -50,6 +50,7 @@ func main() {
 	arr.Push(8)
 	arr.Push(25)
 	fmt.Printf("Initial array is %v\n", arr)
+	fmt.Printf("Length of an array is %d\n", arr.length)
 	getVal := arr.Get(0)
 	fmt.Printf("Value at index 0 is %d\n", getVal)
 	popVal := arr.Pop()
