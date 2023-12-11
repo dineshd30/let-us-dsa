@@ -25,6 +25,7 @@ func (l *LinkList) Append(value any) {
 
 	tailNode := l.tail
 	tailNode.next = newNode
+	newNode.prev = tailNode
 	l.tail = newNode
 	l.length++
 }
@@ -40,6 +41,7 @@ func (l *LinkList) Prepend(value any) {
 
 	headNode := l.head
 	newNode.next = headNode
+	headNode.prev = newNode
 	l.head = newNode
 	l.length++
 }
@@ -59,7 +61,9 @@ func (l *LinkList) Insert(index int, value any) {
 	leftNode := l.traverseToIndex(index)
 	rightNode := leftNode.next
 	leftNode.next = newNode
+	newNode.prev = leftNode
 	newNode.next = rightNode
+	rightNode.prev = newNode
 	l.length++
 }
 
@@ -78,6 +82,7 @@ func (l *LinkList) Delete(index int) {
 	}
 	rightNode := nodeToBeDeleted.next
 	leftNode.next = rightNode
+	rightNode.prev = leftNode
 	l.length--
 }
 
@@ -116,6 +121,7 @@ func (l *LinkList) ToArray() []any {
 type LinkListNode struct {
 	value any
 	next  *LinkListNode
+	prev  *LinkListNode
 }
 
 func NewLinkListNode(v any) *LinkListNode {
