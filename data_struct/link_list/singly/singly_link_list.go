@@ -81,6 +81,26 @@ func (l *LinkList) Delete(index int) {
 	l.length--
 }
 
+func (l *LinkList) Reverse() {
+	if l.head.next == nil {
+		return
+	}
+
+	headNode := l.head
+	firstNode := l.head
+	secondNode := firstNode.next
+	for secondNode != nil {
+		thirdNode := secondNode.next
+		secondNode.next = firstNode
+		firstNode = secondNode
+		secondNode = thirdNode
+	}
+
+	l.head.next = nil
+	l.head = firstNode
+	l.tail = headNode
+}
+
 func (l *LinkList) traverseToIndex(index int) *LinkListNode {
 	if index <= 0 {
 		return nil
@@ -141,6 +161,9 @@ func main() {
 	fmt.Printf("Head value is %d and Tail value is %d and length is %d\n", ll.head.value, ll.tail.value, ll.length)
 	ll.Delete(0)
 	ll.Delete(3)
+	fmt.Printf("Singly Link List is %v\n", ll.ToArray())
+	fmt.Printf("Head value is %d and Tail value is %d and length is %d\n", ll.head.value, ll.tail.value, ll.length)
+	ll.Reverse()
 	fmt.Printf("Singly Link List is %v\n", ll.ToArray())
 	fmt.Printf("Head value is %d and Tail value is %d and length is %d\n", ll.head.value, ll.tail.value, ll.length)
 }
