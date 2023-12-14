@@ -28,11 +28,12 @@ func NewNode(v int) *Node {
 	return &Node{value: v}
 }
 
-// Insert into BST
+// Wrapper insert into BST
 func (b *BST) Insert(v int) {
 	b.root = insertIntoBST(b.root, v)
 }
 
+// Internal insert into BST
 func insertIntoBST(root *Node, v int) *Node {
 	// Base condition
 	if root == nil {
@@ -68,8 +69,13 @@ func (b *BST) Search(root *Node, v int) *Node {
 	}
 }
 
-// Remove from BST
-func (b *BST) Remove(root *Node, v int) *Node {
+// Wrapper remove from BST
+func (b *BST) Remove(v int) {
+	b.root = removeFromBST(b.root, v)
+}
+
+// Internal remove from BST
+func removeFromBST(root *Node, v int) *Node {
 	if root == nil {
 		return nil
 	}
@@ -98,17 +104,17 @@ func (b *BST) Remove(root *Node, v int) *Node {
 
 		// When node has 2 children
 		if root.left != nil && root.right != nil {
-			minNode := b.Min(root.right)
+			minNode := min(root.right)
 			root.value = minNode.value
-			root.right = b.Remove(root, minNode.value)
+			root.right = removeFromBST(root, minNode.value)
 			return root
 		}
 	} else if v < root.value {
 		// Node to be removed is in left part of the tree
-		root.left = b.Remove(root.left, v)
+		root.left = removeFromBST(root.left, v)
 	} else {
 		// Node to be removed is in right part of the tree
-		root.right = b.Remove(root.right, v)
+		root.right = removeFromBST(root.right, v)
 	}
 
 	return root
@@ -127,7 +133,7 @@ func (b *BST) InOrderTraverser(node *Node) {
 }
 
 // Min from BST
-func (b *BST) Min(node *Node) *Node {
+func min(node *Node) *Node {
 	for node.left != nil {
 		node = node.left
 	}
@@ -136,7 +142,7 @@ func (b *BST) Min(node *Node) *Node {
 }
 
 // Max from BST
-func (b *BST) Max(node *Node) *Node {
+func max(node *Node) *Node {
 	for node.right != nil {
 		node = node.right
 	}
@@ -150,12 +156,12 @@ func main() {
 	bst.InOrderTraverser(bst.root)
 	fmt.Println()
 	fmt.Printf("Search 6 - %v\n", bst.Search(bst.root, 6))
-	fmt.Printf("Max - %v\n", bst.Max(bst.root))
-	fmt.Printf("Min - %v\n", bst.Min(bst.root))
-	bst.Remove(bst.root, 200)
+	fmt.Printf("Max - %v\n", max(bst.root))
+	fmt.Printf("Min - %v\n", min(bst.root))
+	bst.Remove(6)
 	bst.InOrderTraverser(bst.root)
 	fmt.Println()
 	fmt.Printf("Search 6 - %v\n", bst.Search(bst.root, 6))
-	fmt.Printf("Max - %v\n", bst.Max(bst.root))
-	fmt.Printf("Min - %v\n", bst.Min(bst.root))
+	fmt.Printf("Max - %v\n", max(bst.root))
+	fmt.Printf("Min - %v\n", min(bst.root))
 }
