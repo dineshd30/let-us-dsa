@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+const SPACE string = "     "
+
 // BST tree structure
 type BST struct {
 	root *Node
@@ -144,6 +146,19 @@ func (node *Node) PreOrderTraverser() {
 	node.right.PreOrderTraverser()
 }
 
+// Print BST
+func (node *Node) Print(s string) {
+	// Base case
+	if node == nil {
+		return
+	}
+
+	s = fmt.Sprintf("%s %s", s, SPACE)
+	node.right.Print(s)
+	fmt.Printf("%s  %d \n", s, node.value)
+	node.left.Print(s)
+}
+
 // Post-order traverser of the tree
 func (node *Node) PostOrderTraverser() {
 	// Base case
@@ -176,7 +191,9 @@ func (node *Node) Max() *Node {
 
 func main() {
 	fmt.Println("Implementing binary search tree")
-	bst := NewBST([]int{9, 4, 6, 20, 170, 15, 1})
+	bst := NewBST([]int{9, 4, 6, 20, 170, 15, 1, 22, 200})
+	fmt.Println("Printing the BST")
+	bst.root.Print("")
 	bst.root.InOrderTraverser()
 	fmt.Println()
 	fmt.Printf("Search 6 - %v\n", bst.root.Search(6))
@@ -191,4 +208,7 @@ func main() {
 	bst.root.PreOrderTraverser()
 	fmt.Println()
 	bst.root.PostOrderTraverser()
+	fmt.Println()
+	fmt.Println("Printing the BST")
+	bst.root.Print("")
 }
