@@ -2,19 +2,19 @@ package main
 
 import "fmt"
 
-// BST structure
+// BST tree structure
 type BST struct {
 	root *Node
 }
 
-// BST node
+// BST node structure
 type Node struct {
 	value int
 	left  *Node
 	right *Node
 }
 
-// New bst
+// New BST tree
 func NewBST(arr []int) *BST {
 	bst := &BST{}
 	for _, v := range arr {
@@ -30,110 +30,134 @@ func NewNode(v int) *Node {
 
 // Wrapper insert into BST
 func (b *BST) Insert(v int) {
-	b.root = insertIntoBST(b.root, v)
-}
-
-// Internal insert into BST
-func insertIntoBST(root *Node, v int) *Node {
-	// Base condition
-	if root == nil {
-		node := NewNode(v)
-		return node
-	}
-
-	if v > root.value {
-		root.right = insertIntoBST(root.right, v)
-	} else {
-		root.left = insertIntoBST(root.left, v)
-	}
-
-	return root
-}
-
-// Search from BST
-func (b *BST) Search(root *Node, v int) *Node {
-	// Base condition 1
-	if root == nil {
-		return nil
-	}
-
-	// Base condition 2
-	if v == root.value {
-		return root
-	}
-
-	if v > root.value {
-		return b.Search(root.right, v)
-	} else {
-		return b.Search(root.left, v)
-	}
+	b.root = b.root.Insert(v)
 }
 
 // Wrapper remove from BST
 func (b *BST) Remove(v int) {
-	b.root = removeFromBST(b.root, v)
+	b.root = b.root.Remove(v)
+}
+
+// Internal insert into BST
+func (node *Node) Insert(v int) *Node {
+	// Base condition
+	if node == nil {
+		node := NewNode(v)
+		return node
+	}
+
+	if v > node.value {
+		node.right = node.right.Insert(v)
+	} else {
+		node.left = node.left.Insert(v)
+	}
+
+	return node
 }
 
 // Internal remove from BST
-func removeFromBST(root *Node, v int) *Node {
-	if root == nil {
+func (node *Node) Remove(v int) *Node {
+	if node == nil {
 		return nil
 	}
 
 	// Found the node to be removed
-	if root.value == v {
+	if node.value == v {
 		// When node has 0 child
-		if root.left == nil && root.right == nil {
-			root = nil
+		if node.left == nil && node.right == nil {
+			node = nil
 			return nil
 		}
 
 		// When node has 1 left child
-		if root.left != nil && root.right == nil {
-			temp := root.left
-			root = nil
+		if node.left != nil && node.right == nil {
+			temp := node.left
+			node = nil
 			return temp
 		}
 
 		// When node has 1 right child
-		if root.left == nil && root.right != nil {
-			temp := root.right
-			root = nil
+		if node.left == nil && node.right != nil {
+			temp := node.right
+			node = nil
 			return temp
 		}
 
 		// When node has 2 children
-		if root.left != nil && root.right != nil {
-			minNode := min(root.right)
-			root.value = minNode.value
-			root.right = removeFromBST(root, minNode.value)
-			return root
+		if node.left != nil && node.right != nil {
+			minNode := node.right.Min()
+			node.value = minNode.value
+			node.right = node.Remove(minNode.value)
+			return node
 		}
-	} else if v < root.value {
+	} else if v < node.value {
 		// Node to be removed is in left part of the tree
-		root.left = removeFromBST(root.left, v)
+		node.left = node.left.Remove(v)
 	} else {
 		// Node to be removed is in right part of the tree
-		root.right = removeFromBST(root.right, v)
+		node.right = node.right.Remove(v)
 	}
 
-	return root
+	return node
+}
+
+// Search from BST
+func (node *Node) Search(v int) *Node {
+	// Base condition 1
+	if node == nil {
+		return nil
+	}
+
+	// Base condition 2
+	if v == node.value {
+		return node
+	}
+
+	if v > node.value {
+		return node.right.Search(v)
+	} else {
+		return node.left.Search(v)
+	}
 }
 
 // In-order traverser of BST
-func (b *BST) InOrderTraverser(node *Node) {
+func (node *Node) InOrderTraverser() {
 	// Base case
 	if node == nil {
 		return
 	}
 
-	b.InOrderTraverser(node.left)
+	node.left.InOrderTraverser()
 	fmt.Printf("%d  ", node.value)
-	b.InOrderTraverser(node.right)
+	node.right.InOrderTraverser()
+}
+
+// Pre-order traverser of the tree
+func (node *Node) PreOrderTraverser() {
+	// Base case
+	if node == nil {
+		return
+	}
+
+	fmt.Printf("%d  ", node.value)
+	node.left.PreOrderTraverser()
+	node.right.PreOrderTraverser()
+}
+
+// Post-order traverser of the tree
+func (node *Node) PostOrderTraverser() {
+	// Base case
+	if node == nil {
+		return
+	}
+
+	node.left.PostOrderTraverser()
+	node.right.PostOrderTraverser()
+	fmt.Printf("%d  ", node.value)
 }
 
 // Min from BST
-func min(node *Node) *Node {
+func (node *Node) Min() *Node {
 	for node.left != nil {
 		node = node.left
 	}
@@ -142,7 +166,7 @@ func min(node *Node) *Node {
 }
 
 // Max from BST
-func max(node *Node) *Node {
+func (node *Node) Max() *Node {
 	for node.right != nil {
 		node = node.right
 	}
@@ -153,15 +177,18 @@ func max(node *Node) *Node {
 func main() {
 	fmt.Println("Implementing binary search tree")
 	bst := NewBST([]int{9, 4, 6, 20, 170, 15, 1})
-	bst.InOrderTraverser(bst.root)
+	bst.root.InOrderTraverser()
 	fmt.Println()
-	fmt.Printf("Search 6 - %v\n", bst.Search(bst.root, 6))
-	fmt.Printf("Max - %v\n", max(bst.root))
-	fmt.Printf("Min - %v\n", min(bst.root))
+	fmt.Printf("Search 6 - %v\n", bst.root.Search(6))
+	fmt.Printf("Max - %v\n", bst.root.Max())
+	fmt.Printf("Min - %v\n", bst.root.Min())
 	bst.Remove(6)
-	bst.InOrderTraverser(bst.root)
+	bst.root.InOrderTraverser()
 	fmt.Println()
-	fmt.Printf("Search 6 - %v\n", bst.Search(bst.root, 6))
-	fmt.Printf("Max - %v\n", max(bst.root))
-	fmt.Printf("Min - %v\n", min(bst.root))
+	fmt.Printf("Search 6 - %v\n", bst.root.Search(6))
+	fmt.Printf("Max - %v\n", bst.root.Max())
+	fmt.Printf("Min - %v\n", bst.root.Min())
+	bst.root.PreOrderTraverser()
+	fmt.Println()
+	bst.root.PostOrderTraverser()
 }
