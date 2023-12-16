@@ -111,7 +111,7 @@ func (node *Node) Remove(v int) *Node {
 	return node
 }
 
-// Search from BST(recursive approach)
+// Search given value in the BST(recursive approach)
 func (node *Node) Search(v int) *Node {
 	// Base condition 1
 	if node == nil {
@@ -130,7 +130,7 @@ func (node *Node) Search(v int) *Node {
 	}
 }
 
-// Search from BST(iterative approach)
+// Search given value in the BST(iterative approach)
 func (node *Node) SearchIterative(v int) *Node {
 	temp := node
 	for temp != nil {
@@ -145,30 +145,6 @@ func (node *Node) SearchIterative(v int) *Node {
 	return temp
 }
 
-// In-order traverser of BST
-func (node *Node) InOrderTraverser() {
-	// Base case
-	if node == nil {
-		return
-	}
-
-	node.left.InOrderTraverser()
-	fmt.Printf("%d  ", node.value)
-	node.right.InOrderTraverser()
-}
-
-// Pre-order traverser of the tree
-func (node *Node) PreOrderTraverser() {
-	// Base case
-	if node == nil {
-		return
-	}
-
-	fmt.Printf("%d  ", node.value)
-	node.left.PreOrderTraverser()
-	node.right.PreOrderTraverser()
-}
-
 // Print BST
 func (node *Node) Print(s string) {
 	// Base case
@@ -180,18 +156,6 @@ func (node *Node) Print(s string) {
 	node.right.Print(s)
 	fmt.Printf("%s  %d \n", s, node.value)
 	node.left.Print(s)
-}
-
-// Post-order traverser of the tree
-func (node *Node) PostOrderTraverser() {
-	// Base case
-	if node == nil {
-		return
-	}
-
-	node.left.PostOrderTraverser()
-	node.right.PostOrderTraverser()
-	fmt.Printf("%d  ", node.value)
 }
 
 // Min from BST
@@ -228,6 +192,74 @@ func (node *Node) Height() int {
 	}
 }
 
+// In-order traverser of BST - DFS (Depth First Search) technique
+func (node *Node) InOrderTraverser() {
+	// Base case
+	if node == nil {
+		return
+	}
+
+	node.left.InOrderTraverser()
+	fmt.Printf("%d  ", node.value)
+	node.right.InOrderTraverser()
+}
+
+// Pre-order traverser of the tree - DFS (Depth First Search) technique
+func (node *Node) PreOrderTraverser() {
+	// Base case
+	if node == nil {
+		return
+	}
+
+	fmt.Printf("%d  ", node.value)
+	node.left.PreOrderTraverser()
+	node.right.PreOrderTraverser()
+}
+
+// Post-order traverser of the tree - DFS (Depth First Search) technique
+func (node *Node) PostOrderTraverser() {
+	// Base case
+	if node == nil {
+		return
+	}
+
+	node.left.PostOrderTraverser()
+	node.right.PostOrderTraverser()
+	fmt.Printf("%d  ", node.value)
+}
+
+// Level oder traverser of the tree - BFS (Breadth First Search) technique
+func (node *Node) LevelOrderTraverser() {
+	fmt.Println("Level order traverser of the tree")
+	// Get the height of the tree
+	height := node.Height()
+
+	// Traverse each level iteratively
+	for i := 0; i <= height; i++ {
+		traverseTheLevel(node, i)
+		fmt.Println()
+	}
+}
+
+// Internal function of LevelOrderTraverser method
+func traverseTheLevel(node *Node, level int) {
+	// Base case 1
+	if node == nil {
+		return
+	}
+
+	// Base case 2
+	if level == 0 {
+		fmt.Printf("%d	", node.value)
+		return
+	}
+
+	// Recursively traverse the left subtree for the given level
+	traverseTheLevel(node.left, level-1)
+	// Recursively traverse the right subtree for the given level
+	traverseTheLevel(node.right, level-1)
+}
+
 func main() {
 	fmt.Println("Implementing binary search tree")
 	bst := NewBST([]int{9, 4, 6, 20, 170, 15, 1, 22, 200})
@@ -250,6 +282,8 @@ func main() {
 	bst.root.PreOrderTraverser()
 	fmt.Println()
 	bst.root.PostOrderTraverser()
+	fmt.Println()
+	bst.root.LevelOrderTraverser()
 	fmt.Println()
 	fmt.Println("Printing the BST")
 	bst.root.Print("")
