@@ -212,11 +212,28 @@ func (node *Node) Max() *Node {
 	return node
 }
 
+// Height of BST
+func (node *Node) Height() int {
+	// Base condition
+	if node == nil {
+		return -1
+	}
+
+	heightOfLeftSubTree := node.left.Height()
+	heightOfRightSubTree := node.right.Height()
+	if heightOfLeftSubTree > heightOfRightSubTree {
+		return heightOfLeftSubTree + 1
+	} else {
+		return heightOfRightSubTree + 1
+	}
+}
+
 func main() {
 	fmt.Println("Implementing binary search tree")
 	bst := NewBST([]int{9, 4, 6, 20, 170, 15, 1, 22, 200})
 	fmt.Println("Printing the BST")
 	bst.root.Print("")
+	fmt.Printf("Height of BST is %d\n", bst.root.Height())
 	bst.root.InOrderTraverser()
 	fmt.Println()
 	fmt.Printf("Recursive search 6 - %v\n", bst.root.Search(6))
