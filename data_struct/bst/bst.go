@@ -37,6 +37,7 @@ func (b *BST) Insert(v int) {
 
 // Wrapper remove from BST
 func (b *BST) Remove(v int) {
+	fmt.Printf("Removing %d from BST\n", v)
 	b.root = b.root.Remove(v)
 }
 
@@ -65,14 +66,17 @@ func (node *Node) Remove(v int) *Node {
 
 	// Found the node to be removed
 	if node.value == v {
+		fmt.Printf("Found %d at node %v\n", v, node)
 		// When node has 0 child
 		if node.left == nil && node.right == nil {
+			fmt.Printf("0 child: Removing node %v and returning %v\n", node, nil)
 			node = nil
 			return nil
 		}
 
 		// When node has 1 left child
 		if node.left != nil && node.right == nil {
+			fmt.Printf("1 left child: Removing node %v and returning %v\n", node, node.left)
 			temp := node.left
 			node = nil
 			return temp
@@ -80,6 +84,7 @@ func (node *Node) Remove(v int) *Node {
 
 		// When node has 1 right child
 		if node.left == nil && node.right != nil {
+			fmt.Printf("1 right child: Removing node %v and returning %v\n", node, node.right)
 			temp := node.right
 			node = nil
 			return temp
@@ -89,21 +94,24 @@ func (node *Node) Remove(v int) *Node {
 		if node.left != nil && node.right != nil {
 			minNode := node.right.Min()
 			node.value = minNode.value
-			node.right = node.Remove(minNode.value)
+			node.right = node.right.Remove(minNode.value)
+			fmt.Printf("2 children: Removing node %v and returning %v\n", minNode, node)
 			return node
 		}
 	} else if v < node.value {
 		// Node to be removed is in left part of the tree
+		fmt.Printf("Removing %d from left part of tree with root node %v\n", v, node.left)
 		node.left = node.left.Remove(v)
 	} else {
 		// Node to be removed is in right part of the tree
+		fmt.Printf("Removing %d from right part of tree with root node %v\n", v, node.right)
 		node.right = node.right.Remove(v)
 	}
 
 	return node
 }
 
-// Search from BST
+// Search from BST(recursive approach)
 func (node *Node) Search(v int) *Node {
 	// Base condition 1
 	if node == nil {
@@ -120,6 +128,21 @@ func (node *Node) Search(v int) *Node {
 	} else {
 		return node.left.Search(v)
 	}
+}
+
+// Search from BST(iterative approach)
+func (node *Node) SearchIterative(v int) *Node {
+	temp := node
+	for temp != nil {
+		if v == temp.value {
+			return temp
+		} else if v < temp.value {
+			temp = temp.left
+		} else {
+			temp = temp.right
+		}
+	}
+	return temp
 }
 
 // In-order traverser of BST
@@ -196,13 +219,15 @@ func main() {
 	bst.root.Print("")
 	bst.root.InOrderTraverser()
 	fmt.Println()
-	fmt.Printf("Search 6 - %v\n", bst.root.Search(6))
+	fmt.Printf("Recursive search 6 - %v\n", bst.root.Search(6))
+	fmt.Printf("Iterative search 6 - %v\n", bst.root.SearchIterative(6))
 	fmt.Printf("Max - %v\n", bst.root.Max())
 	fmt.Printf("Min - %v\n", bst.root.Min())
-	bst.Remove(6)
+	bst.Remove(9)
 	bst.root.InOrderTraverser()
 	fmt.Println()
-	fmt.Printf("Search 6 - %v\n", bst.root.Search(6))
+	fmt.Printf("Recursive search 9 - %v\n", bst.root.Search(9))
+	fmt.Printf("Iterative search 9 - %v\n", bst.root.SearchIterative(9))
 	fmt.Printf("Max - %v\n", bst.root.Max())
 	fmt.Printf("Min - %v\n", bst.root.Min())
 	bst.root.PreOrderTraverser()
