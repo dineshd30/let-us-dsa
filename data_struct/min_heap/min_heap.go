@@ -79,10 +79,34 @@ func (m *MinHeap) Delete() {
 // Heapify min heap
 func (m *MinHeap) Heapify(index int) {
 	fmt.Printf("Heapifying min heap for index %d\n", index)
+	smallest := index
+	left := index * 2
+	right := index*2 + 1
+
+	if left <= m.Size && m.Array[left] < m.Array[smallest] {
+		smallest = left
+	}
+
+	if right <= m.Size && m.Array[right] < m.Array[smallest] {
+		smallest = right
+	}
+
+	if smallest != index {
+		m.SwapValue(smallest, index)
+		m.Heapify(smallest)
+	}
+}
+
+// Run heapify on min heap
+func (m *MinHeap) RunHeapify() {
+	for i := m.Size / 2; i > 0; i-- {
+		m.Heapify(i)
+	}
 }
 
 // Print min heap
 func (m *MinHeap) Print() {
+
 	for i := 1; i <= m.Size; i++ {
 		fmt.Printf("%d  ", m.Array[i])
 	}
@@ -105,4 +129,13 @@ func main() {
 	minHeap.Delete()
 	minHeap.Print()
 	fmt.Printf("Min heap size - %d\n", minHeap.Size)
+
+	fmt.Println()
+	fmt.Println("Demo of Heapify Algorithm")
+	minHeap2 := NewMinHeap(10)
+	minHeap2.Array = []int{-1, 22, 44, 12, 67, 24, 1}
+	minHeap2.Size = 6
+	minHeap2.Print()
+	minHeap2.RunHeapify()
+	minHeap2.Print()
 }
