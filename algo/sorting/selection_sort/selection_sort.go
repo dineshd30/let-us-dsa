@@ -9,7 +9,7 @@ func selectionSort(arr []int) []int {
 
 	for i := 0; i <= lastIndex-1; i++ {
 		lowIndex := i
-		
+
 		for j := i + 1; j <= lastIndex; j++ {
 			if arr[j] < arr[lowIndex] {
 				lowIndex = j
