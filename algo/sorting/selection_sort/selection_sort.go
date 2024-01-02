@@ -3,21 +3,22 @@ package main
 import "fmt"
 
 // This function sorts given array in ascending order
-// We call it selection sort because in every pass the smallest value index is selected and inserted into its correct position
+// We call it selection sort because in every pass the smallest value index is selected from unsorted pile
+// and inserted into its correct position
 func selectionSort(arr []int) []int {
 	lastIndex := len(arr) - 1
 
 	for i := 0; i <= lastIndex-1; i++ {
-		lowIndex := i
+		smallestValueIndex := i
 
 		for j := i + 1; j <= lastIndex; j++ {
-			if arr[j] < arr[lowIndex] {
-				lowIndex = j
+			if arr[j] < arr[smallestValueIndex] {
+				smallestValueIndex = j
 			}
 		}
 
-		if lowIndex != i {
-			arr[lowIndex], arr[i] = arr[i], arr[lowIndex]
+		if smallestValueIndex != i {
+			arr[smallestValueIndex], arr[i] = arr[i], arr[smallestValueIndex]
 		}
 	}
 
