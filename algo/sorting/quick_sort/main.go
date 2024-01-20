@@ -48,6 +48,6 @@ func main() {
 	// sort.SliceStable(arr, func(i, j int) bool {
 	// 	return arr[i] > arr[j]
 	// })
-	fmt.Println(arr);
+	// fmt.Println(arr);
 	fmt.Printf("%d\n", quickSort(arr))
 }
