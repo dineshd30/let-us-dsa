@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func partition(arr []int) ([]int, int, []int) {
 	pivot := len(arr) - 1
@@ -42,5 +44,10 @@ func main() {
 	fmt.Println("Implementing quick sort")
 	arr := []int{10, 5, 11, 33, 7, 2, 1, 22, 1}
 	fmt.Printf("%d\n", arr)
+	// Built in function to sort slice in go
+	// sort.SliceStable(arr, func(i, j int) bool {
+	// 	return arr[i] > arr[j]
+	// })
+	fmt.Println(arr);
 	fmt.Printf("%d\n", quickSort(arr))
 }
