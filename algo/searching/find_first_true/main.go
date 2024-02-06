@@ -18,22 +18,18 @@ import (
 // Explanation: first true's index is 2.
 
 func findFirstTrue(arr []bool, left int, right int) int {
-	recordedTrue := []int{}
+	recordedIndex := -1
 	for left > -1 && right < len(arr) && left <= right {
 		midIndex := (left + right) / 2
 		if arr[midIndex] {
-			recordedTrue = append(recordedTrue, midIndex)
+			recordedIndex = midIndex
 			right = midIndex - 1
 		} else {
 			left = midIndex + 1
 		}
 	}
 
-	if len(recordedTrue) > 0 {
-		return recordedTrue[len(recordedTrue)-1]
-	}
-
-	return -1
+	return recordedIndex
 }
 
 func main() {
